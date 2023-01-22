@@ -83,8 +83,10 @@ SELECT B.bid ,B.color FROM sailors S JOIN reserves R ON S.sid = R.sid JOIN boats
 
 
 -- Q17 Find the names of sailors whow have sailed two different boats on the same day.
-SELECT S.sname,COUNT(R.day) FROM sailors S JOIN reserves R ON S.sid = R.sid JOIN boats B  ON R.bid = B.bid WHERE S.sname = 'Lubber' ;
-
+SELECT S.sname FROM  sailors S 
+JOIN reserves R1 ON S.sid = R1.sid  
+JOIN reserves R2  ON S.sid = R2.sid  
+WHERE R1.day = R2.day AND R1.sid = R2.sid AND R1.bid <> R2.bid ;
 
 ;
  sname  
@@ -94,8 +96,9 @@ SELECT S.sname,COUNT(R.day) FROM sailors S JOIN reserves R ON S.sid = R.sid JOIN
 (2 rows)
 
 -- Q20 Find all sids of sailors who have a rating of 10 or reserved boat 104
-SELECT
-
+SELECT S.sid FROM sailors S 
+FULL OUTER JOIN (SELECT * FROM reserves R WHERE R.bid = 104) R ON S.sid = R.sid  
+WHERE S.rating = 10 OR R.bid = 104;
 ;
  sid 
 -----
@@ -106,9 +109,18 @@ SELECT
 (4 rows)
 
 -- Q21 Find the names of sailors who have hot reserved a red boat
-SELECT
 
-;
+SELECT S.sname
+FROM sailors S 
+LEFT JOIN reserves R ON s.sid = R.sid
+FULL OUTER JOIN (
+  SELECT R.sid FROM reserves R 
+  JOIN boats B ON R.bid = B.bid 
+  LEFT JOIN (SELECT R.sid FROM reserves R JOIN boats B ON R.bid = B.bid WHERE B.color = 'red') R1 ON R.sid = R1.sid 
+  WHERE R1.sid IS NULL
+) R2 ON R2.sid = R.sid 
+WHERE R.sid IS NULL OR R2.sid IS NOT NULL;
+
   sname  
 ---------
  Brutus
@@ -121,17 +133,15 @@ SELECT
 (7 rows)
 
 -- Q28 Count the number of sailors
-SELECT
+SELECT COUNT(*) FROM sailors ;
 
-;
  count 
 -------
     10
 (1 row)
 
 -- Q29 Count the number of different sailor names
-SELECT
-
+SELECT COUNT(DISTINCT sname) FROM sailors  ;
 ;
  count 
 -------
@@ -139,9 +149,17 @@ SELECT
 (1 row)
 
 -- Q30 Find the names of sailors who are older than the oldest sailor with a rating of 10
-SELECT
 
-;
+SELECT S.sname FROM sailors S ,(
+  SELECT S.age  
+  FROM sailors S  
+  WHERE S.age = ( 
+      SELECT MAX (S2.age) 
+      FROM sailors S2 
+      WHERE S2.rating = 10
+  ) AND S.rating = 10
+) T2 WHERE S.age > T2.age;
+
 sname  
 --------
  Dustin
