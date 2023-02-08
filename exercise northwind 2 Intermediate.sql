@@ -3,13 +3,9 @@
 
 
 -- 51. Select the number of sales per category and country.
-SELECT category_name ,country,COUNT(*) AS COUNT
 
 -- 52. Create a report that shows the product name AND supplier id for all products supplied by Exotic Liquids, Grandma Kelly's Homestead, AND Tokyo TraderS.
-SELECT S.supplier_id, S.company_name,P.product_id ,P.product_name 
-FROM products P
-JOIN suppliers S ON P.supplier_id = S.supplier_id
-WHERE S.company_name IN ('Exotic Liquids', 'Grandma Kelly''s Homestead', 'Tokyo TraderS'); 
+
 -- 53. Create a report that shows all products by name that are in the "Seafood" category. 
 
 -- 54. Create a report that shows all companies by name that sell products in Category ID 8.
@@ -54,3 +50,27 @@ WHERE S.company_name IN ('Exotic Liquids', 'Grandma Kelly''s Homestead', 'Tokyo 
 
 -- 72. Quarterly Orders by Product, shows how to convert order dates to the corresponding quarters. 
 -- It also demonstrates how SUM function is used together with CASE statement to get sales for each quarter, where quarters are converted from OrderDate column.
+
+-- 73. Let’s say that data analyst is preparing a presentation and interested in how many orders were placed by every particular employee during each year of operation.
+-----------+------------+------+-------
+ last_name | first_name | year | count 
+-----------+------------+------+-------
+ Buchanan  | Steven     | 1996 |    11
+ Buchanan  | Steven     | 1997 |    18
+ Buchanan  | Steven     | 1998 |    13
+ Callahan  | Laura      | 1996 |    19
+ Callahan  | Laura      | 1997 |    54
+ Callahan  | Laura      | 1998 |    31
+
+-----------+------------+-------+-------+-------
+  last_name | first_name | y1996 | y1997 | y1998 
+-----------+------------+-------+-------+-------
+ Peacock   | Margaret   |    31 |    81 |    44
+ King      | Robert     |    11 |    36 |    25
+ Davolio   | Nancy      |    26 |    55 |    42
+ Callahan  | Laura      |    19 |    54 |    31
+ Fuller    | Andrew     |    16 |    41 |    39
+ Suyama    | Michael    |    15 |    33 |    19
+ Buchanan  | Steven     |    11 |    18 |    13
+ Dodsworth | Anne       |     5 |    19 |    19
+ Leverling | Janet      |    18 |    71 |    38
